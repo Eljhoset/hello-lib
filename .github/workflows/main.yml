@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build RPM
     steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
       - name: Build RPM
         id: build
         uses: Eljhoset/hello-build-action@main
