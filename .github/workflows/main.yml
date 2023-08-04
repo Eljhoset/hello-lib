@@ -1,0 +1,14 @@
+name: Build and Publish RPM
+
+on: [push]
+
+jobs:
+  build_rpm:
+    runs-on: ubuntu-latest
+    name: Build RPM
+    steps:
+      - name: Build RPM
+        id: build
+        uses: Eljhoset/hello-build-action@main
+        with:
+          rpm_output_folder: /rpm
