@@ -26,7 +26,7 @@ jobs:
           rpm_output_folder: /rpm
       - name: Upload to GCP Artifact Registry
         run: |
-          RPMS=$(ls ${{ inputs.rpm_output_folder }}/*.rpm | grep -vE '(src|debug)')
+          RPMS=$(ls /rpm/*.rpm | grep -vE '(src|debug)')
           gcloud config set artifacts/repository gcp-repo
           gcloud config set artifacts/location us-east1          
           gcloud artifacts yum upload --source=$RPMS
