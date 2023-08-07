@@ -12,10 +12,22 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v1'
       - name: Build RPM
         id: build
-        uses: Eljhoset/hello-build-action@build_publish
+        uses: Eljhoset/hello-build-action@main
         with:
-          workload_identity_provider_id: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
           rpm_output_folder: /rpm
+      - name: Upload to GCP Artifact Registry
+        run: |
+          RPMS=$(ls ${{ inputs.rpm_output_folder }}/*.rpm | grep -vE '(src|debug)')
+          gcloud config set artifacts/repository gcp-repo
+          gcloud config set artifacts/location us-east1          
+          gcloud artifacts yum upload --source=$RPMS
+      
