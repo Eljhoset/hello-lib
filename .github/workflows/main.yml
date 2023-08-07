@@ -3,31 +3,29 @@ name: Build and Publish RPM
 on: [push]
 
 jobs:
-  build_rpm:
+  upload_artifact:
     runs-on: ubuntu-latest
-    name: Build RPM
+    timeout-minutes: 3
+    name: Upload RPM
     permissions:
       contents: 'read'
       id-token: 'write'
     steps:
-      - name: Check out the repo
+      - id: checkout
+        name: Checkout
         uses: actions/checkout@v3
-      - name: 'Authenticate to Google Cloud'
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          access_token_lifetime: '100s'
+          token_format: 'access_token'
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
-      - name: Build RPM
-        id: build
-        uses: Eljhoset/hello-build-action@main
-        with:
-          rpm_output_folder: /rpm
-      - name: Upload to GCP Artifact Registry
+      - name: Upload to Artifact Registry
         run: |
-          RPMS=$(ls /rpm/*.rpm | grep -vE '(src|debug)')
           gcloud config set artifacts/repository gcp-repo
-          gcloud config set artifacts/location us-east1          
-          gcloud artifacts yum upload --source=$RPMS
-      
+          gcloud config set artifacts/location us-east1
+          gcloud artifacts yum upload --source=$(ls *.rpm | grep -vE '(src|debug)')
