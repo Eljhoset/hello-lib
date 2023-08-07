@@ -4,7 +4,6 @@ on: [push]
 jobs:
   upload_artifact:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
     name: Upload RPM
     permissions:
       contents: 'read'
