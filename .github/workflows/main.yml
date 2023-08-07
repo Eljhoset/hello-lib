@@ -17,8 +17,6 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
-          access_token_lifetime: '100s'
-          token_format: 'access_token'
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
       - name: Build RPM
