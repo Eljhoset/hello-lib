@@ -1,5 +1,4 @@
-name: Build and Publish RPM
-
+name: Upload Artifact to GCP
 on: [push]
 
 jobs:
