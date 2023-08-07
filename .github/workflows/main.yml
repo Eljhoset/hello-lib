@@ -6,6 +6,9 @@ jobs:
   build_rpm:
     runs-on: ubuntu-latest
     name: Build RPM
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
