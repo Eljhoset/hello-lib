@@ -13,8 +13,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Build RPM
         id: build
-        uses: Eljhoset/hello-build-action@build_publish
+        uses: Eljhoset/hello-build-action@main
         with:
-          workload_identity_provider_id: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
           rpm_output_folder: /rpm
